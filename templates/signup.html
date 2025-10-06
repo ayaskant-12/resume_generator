@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - ResumeGen{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card glass">
+        <div class="auth-header">
+            <h2>Create Your Account</h2>
+            <p>Start building professional resumes today</p>
+        </div>
+        
+        <form method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required 
+                       class="form-input" placeholder="Enter your email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required 
+                       class="form-input" placeholder="Create a password">
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required 
+                       class="form-input" placeholder="Confirm your password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full">
+                <i class="fas fa-user-plus"></i>Create Account
+            </button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
