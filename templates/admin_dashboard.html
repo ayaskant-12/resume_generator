@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - ResumeGen{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <p>Manage users and resumes across the platform</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card glass">
+        <div class="stat-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ total_users }}</h3>
+            <p>Total Users</p>
+        </div>
+    </div>
+    
+    <div class="stat-card glass">
+        <div class="stat-icon">
+            <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ total_resumes }}</h3>
+            <p>Total Resumes</p>
+        </div>
+    </div>
+    
+    <div class="stat-card glass">
+        <div class="stat-icon">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-content">
+            <h3 id="users-today">Loading...</h3>
+            <p>Users Today</p>
+        </div>
+    </div>
+</div>
+
+<div class="admin-actions">
+    <a href="{{ url_for('admin_users') }}" class="admin-action-card glass">
+        <i class="fas fa-users-cog"></i>
+        <h3>Manage Users</h3>
+        <p>View and manage all registered users</p>
+    </a>
+    
+    <a href="{{ url_for('admin_resumes') }}" class="admin-action-card glass">
+        <i class="fas fa-file-contract"></i>
+        <h3>Manage Resumes</h3>
+        <p>View and manage all resumes</p>
+    </a>
+</div>
+
+<div class="recent-section glass">
+    <h2>Recent Users</h2>
+    <div class="recent-users">
+        {% for user in recent_users %}
+        <div class="user-item">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <strong>{{ user.email }}</strong>
+                <span>Joined {{ user.created_at.strftime('%b %d, %Y') }}</span>
+            </div>
+            <div class="user-role">
+                <span class="role-badge {{ user.role }}">{{ user.role }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+// Load real-time stats
+fetch('/api/stats')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('users-today').textContent = data.users_today;
+    })
+    .catch(error => {
+        console.error('Error loading stats:', error);
+        document.getElementById('users-today').textContent = 'Error';
+    });
+</script>
+{% endblock %}
