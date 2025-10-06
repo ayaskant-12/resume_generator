@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Resume - ResumeGen{% endblock %}
+
+{% block content %}
+<div class="form-header">
+    <h1>Edit Resume</h1>
+    <p>Update your professional details</p>
+</div>
+
+<form method="POST" class="resume-form glass">
+    <!-- Basic Information -->
+    <div class="form-section">
+        <h2><i class="fas fa-info-circle"></i>Basic Information</h2>
+        <div class="form-group">
+            <label for="title">Resume Title</label>
+            <input type="text" id="title" name="title" required 
+                   class="form-input" value="{{ resume.title }}"
+                   placeholder="e.g., Senior Software Engineer Resume">
+        </div>
+        <div class="form-group">
+            <label for="summary">Professional Summary</label>
+            <textarea id="summary" name="summary" class="form-textarea" 
+                      placeholder="Brief overview of your professional background and career objectives..." 
+                      rows="4">{{ resume.summary or '' }}</textarea>
+        </div>
+    </div>
+
+    <!-- Education -->
+    <div class="form-section">
+        <div class="section-header">
+            <h2><i class="fas fa-graduation-cap"></i>Education</h2>
+            <button type="button" class="btn btn-secondary btn-small" onclick="addEducation()">
+                <i class="fas fa-plus"></i>Add Education
+            </button>
+        </div>
+        <div id="education-container">
+            {% for edu in resume.education %}
+            <div class="dynamic-entry">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Institution</label>
+                        <input type="text" name="education[{{ loop.index0 }}][institution]" 
+                               class="form-input" value="{{ edu.institution }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Degree</label>
+                        <input type="text" name="education[{{ loop.index0 }}][degree]" 
+                               class="form-input" value="{{ edu.degree }}" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Field of Study</label>
+                        <input type="text" name="education[{{ loop.index0 }}][field]" 
+                               class="form-input" value="{{ edu.field or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="month" name="education[{{ loop.index0 }}][start_date]" 
+                               class="form-input" value="{{ edu.start_date or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="month" name="education[{{ loop.index0 }}][end_date]" 
+                               class="form-input" value="{{ edu.end_date or '' }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="education[{{ loop.index0 }}][description]" 
+                              class="form-textarea" rows="2">{{ edu.description or '' }}</textarea>
+                </div>
+                <button type="button" class="btn btn-danger btn-small" onclick="removeEntry(this)">
+                    <i class="fas fa-trash"></i>Remove
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="form-section">
+        <div class="section-header">
+            <h2><i class="fas fa-briefcase"></i>Work Experience</h2>
+            <button type="button" class="btn btn-secondary btn-small" onclick="addExperience()">
+                <i class="fas fa-plus"></i>Add Experience
+            </button>
+        </div>
+        <div id="experience-container">
+            {% for exp in resume.experience %}
+            <div class="dynamic-entry">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" name="experience[{{ loop.index0 }}][company]" 
+                               class="form-input" value="{{ exp.company }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input type="text" name="experience[{{ loop.index0 }}][position]" 
+                               class="form-input" value="{{ exp.position }}" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="month" name="experience[{{ loop.index0 }}][start_date]" 
+                               class="form-input" value="{{ exp.start_date or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="month" name="experience[{{ loop.index0 }}][end_date]" 
+                               class="form-input" value="{{ exp.end_date or '' }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="experience[{{ loop.index0 }}][description]" 
+                              class="form-textarea" rows="3">{{ exp.description or '' }}</textarea>
+                </div>
+                <button type="button" class="btn btn-danger btn-small" onclick="removeEntry(this)">
+                    <i class="fas fa-trash"></i>Remove
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="form-section">
+        <h2><i class="fas fa-star"></i>Skills</h2>
+        <div class="form-group">
+            <label for="skills">Skills (comma separated)</label>
+            <input type="text" id="skills" name="skills" 
+                   class="form-input" value="{{ resume.skills | join(', ') if resume.skills else '' }}"
+                   placeholder="e.g., Python, JavaScript, Project Management, Leadership">
+            <small class="form-help">Separate skills with commas</small>
+        </div>
+    </div>
+
+    <!-- Awards -->
+    <div class="form-section">
+        <h2><i class="fas fa-trophy"></i>Awards & Certifications</h2>
+        <div class="form-group">
+            <label for="awards">Awards (comma separated)</label>
+            <input type="text" id="awards" name="awards" 
+                   class="form-input" value="{{ resume.awards | join(', ') if resume.awards else '' }}"
+                   placeholder="e.g., Employee of the Year, AWS Certified, Best Project Award">
+            <small class="form-help">Separate awards with commas</small>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i>Update Resume
+        </button>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+<!-- Template for education entry -->
+<template id="education-template">
+    <div class="dynamic-entry">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Institution</label>
+                <input type="text" name="education[0][institution]" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label>Degree</label>
+                <input type="text" name="education[0][degree]" class="form-input" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Field of Study</label>
+                <input type="text" name="education[0][field]" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Start Date</label>
+                <input type="month" name="education[0][start_date]" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>End Date</label>
+                <input type="month" name="education[0][end_date]" class="form-input">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="education[0][description]" class="form-textarea" rows="2"></textarea>
+        </div>
+        <button type="button" class="btn btn-danger btn-small" onclick="removeEntry(this)">
+            <i class="fas fa-trash"></i>Remove
+        </button>
+    </div>
+</template>
+
+<!-- Template for experience entry -->
+<template id="experience-template">
+    <div class="dynamic-entry">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Company</label>
+                <input type="text" name="experience[0][company]" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label>Position</label>
+                <input type="text" name="experience[0][position]" class="form-input" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Start Date</label>
+                <input type="month" name="experience[0][start_date]" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>End Date</label>
+                <input type="month" name="experience[0][end_date]" class="form-input">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="experience[0][description]" class="form-textarea" rows="3"></textarea>
+        </div>
+        <button type="button" class="btn btn-danger btn-small" onclick="removeEntry(this)">
+            <i class="fas fa-trash"></i>Remove
+        </button>
+    </div>
+</template>
+
+<script>
+let educationCount = {{ resume.education | length }};
+let experienceCount = {{ resume.experience | length }};
+
+function addEducation() {
+    const container = document.getElementById('education-container');
+    const template = document.getElementById('education-template');
+    const clone = template.content.cloneNode(true);
+    
+    const inputs = clone.querySelectorAll('[name]');
+    inputs.forEach(input => {
+        input.name = input.name.replace('[0]', `[${educationCount}]`);
+    });
+    
+    container.appendChild(clone);
+    educationCount++;
+}
+
+function addExperience() {
+    const container = document.getElementById('experience-container');
+    const template = document.getElementById('experience-template');
+    const clone = template.content.cloneNode(true);
+    
+    const inputs = clone.querySelectorAll('[name]');
+    inputs.forEach(input => {
+        input.name = input.name.replace('[0]', `[${experienceCount}]`);
+    });
+    
+    container.appendChild(clone);
+    experienceCount++;
+}
+
+function removeEntry(button) {
+    button.closest('.dynamic-entry').remove();
+}
+</script>
+{% endblock %}
