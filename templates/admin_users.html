@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users - ResumeGen{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h1>Manage Users</h1>
+    <p>View and manage all registered users</p>
+</div>
+
+<div class="admin-table-container glass">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Resumes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <span class="role-badge {{ user.role }}">{{ user.role }}</span>
+                </td>
+                <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>{{ user.resumes|length }}</td>
+                <td>
+                    <div class="action-buttons">
+                        {% if user.role != 'admin' %}
+                        <button class="btn btn-warning btn-small" 
+                                onclick="promoteUser({{ user.id }})">
+                            Make Admin
+                        </button>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function promoteUser(userId) {
+    if (confirm('Are you sure you want to make this user an admin?')) {
+        // In a real application, you would implement this endpoint
+        alert('User promotion feature would be implemented here');
+    }
+}
+</script>
+{% endblock %}
