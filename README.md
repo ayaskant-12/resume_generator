@@ -168,7 +168,7 @@ GET	            /admin/users	          User management	          Admin only
 GET	          /admin/resumes	        Resume management	          Admin only
 ```
 ---
-<div align="center"> Made with ❤️ by [Your Name]
+<div align="center"> Made with ❤️ by Ayaskant Dash
 
 ⭐ Star this repo on GitHub
 
