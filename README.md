@@ -1,5 +1,5 @@
 # ResumeGen - Professional Resume Generator
-![ResumeGen](https://img.shields.io/badge/ResumeGen-Professional-blue) ![Flask](https://img.shields.io/badge/Flask-2.3.3-green) ![Python](https://img.shields.io/badge/Python-3.8%252B-blue) ![License](https://img.shields.io/badge/License-MIT-yellow)
+![ResumeGen](https://img.shields.io/badge/ResumeGen-Professional-blue) ![Flask](https://img.shields.io/badge/Flask-2.3.3-green) ![Python](https://img.shields.io/badge/Python-3.8%252B-blue) 
 
 A modern, full-stack web application for creating professional resumes and CVs with instant PDF download capability. Features a stunning glassmorphism design with dark/light mode toggle.
 
